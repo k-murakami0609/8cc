@@ -1,0 +1,904 @@
+origin: int f(){1;}
+ast: (int())f(){1;}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $1, %eax         # emit_expr -> emit_expr:404
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){1L;}
+ast: (int())f(){1L;}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $1, %rax         # emit_expr -> emit_expr:407
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){1152921504606846976;}
+ast: (int())f(){1152921504606846976L;}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $1152921504606846976, %rax # emit_expr -> emit_expr:407
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){1+2-3+4;}
+ast: (int())f(){(+ (- (+ 1 2) 3) 4);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr:404
+	push %rax            # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> push:76
+	mov $2, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr:404
+	mov %rax, %rcx       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:280
+	pop %rax             # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> pop:82
+	add %rcx, %rax       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:286
+	push %rax            # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> push:76
+	mov $3, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr:404
+	mov %rax, %rcx       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:280
+	pop %rax             # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> pop:82
+	sub %rcx, %rax       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:286
+	push %rax            # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> push:76
+	mov $4, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr:404
+	mov %rax, %rcx       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith:280
+	pop %rax             # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> pop:82
+	add %rcx, %rax       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith:286
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){1+2*3+4;}
+ast: (int())f(){(+ (+ 1 (* 2 3)) 4);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr:404
+	push %rax            # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> push:76
+	mov $2, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr:404
+	push %rax            # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> push:76
+	mov $3, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr:404
+	mov %rax, %rcx       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:280
+	pop %rax             # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> pop:82
+	imul %rcx, %rax      # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:286
+	mov %rax, %rcx       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:280
+	pop %rax             # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> pop:82
+	add %rcx, %rax       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:286
+	push %rax            # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> push:76
+	mov $4, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr:404
+	mov %rax, %rcx       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith:280
+	pop %rax             # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> pop:82
+	add %rcx, %rax       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith:286
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){1*2+3*4;}
+ast: (int())f(){(+ (* 1 2) (* 3 4));}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr:404
+	push %rax            # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> push:76
+	mov $2, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr:404
+	mov %rax, %rcx       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:280
+	pop %rax             # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> pop:82
+	imul %rcx, %rax      # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:286
+	push %rax            # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> push:76
+	mov $3, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr:404
+	push %rax            # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> push:76
+	mov $4, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr:404
+	mov %rax, %rcx       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:280
+	pop %rax             # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> pop:82
+	imul %rcx, %rax      # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:286
+	mov %rax, %rcx       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith:280
+	pop %rax             # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> pop:82
+	add %rcx, %rax       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith:286
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){4/2+6/3;}
+ast: (int())f(){(+ (/ 4 2) (/ 6 3));}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $4, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr:404
+	push %rax            # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> push:76
+	mov $2, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr:404
+	mov %rax, %rcx       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:280
+	pop %rax             # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> pop:82
+	mov $0, %edx         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:283
+	idiv %rcx            # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:284
+	push %rax            # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> push:76
+	mov $6, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr:404
+	push %rax            # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> push:76
+	mov $3, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr:404
+	mov %rax, %rcx       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:280
+	pop %rax             # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> pop:82
+	mov $0, %edx         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:283
+	idiv %rcx            # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:284
+	mov %rax, %rcx       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith:280
+	pop %rax             # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> pop:82
+	add %rcx, %rax       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith:286
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){24/2/4;}
+ast: (int())f(){(/ (/ 24 2) 4);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $24, %eax        # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr:404
+	push %rax            # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> push:76
+	mov $2, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr:404
+	mov %rax, %rcx       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:280
+	pop %rax             # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith -> pop:82
+	mov $0, %edx         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:283
+	idiv %rcx            # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr -> emit_binop -> emit_binop_int_arith:284
+	push %rax            # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> push:76
+	mov $4, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> emit_expr:404
+	mov %rax, %rcx       # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith:280
+	pop %rax             # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith -> pop:82
+	mov $0, %edx         # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith:283
+	idiv %rcx            # emit_expr -> emit_expr -> emit_binop -> emit_binop_int_arith:284
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){int a=3;}
+ast: (int())f(){(decl int a 3);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	sub $8, %rsp         # emit_func_prologue:715
+	mov $3, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	mov %eax, -8(%rbp)   # emit_expr -> emit_expr -> emit_lsave:153
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){char c='a';}
+ast: (int())f(){(decl char c 'a');}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	sub $8, %rsp         # emit_func_prologue:715
+	mov $97, %rax        # emit_expr -> emit_expr -> emit_expr:401
+	mov %al, -8(%rbp)    # emit_expr -> emit_expr -> emit_lsave:153
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){char *s="abcd";}
+ast: (int())f(){(decl *char s "abcd");}
+
+	.data                # emit_data_section:664
+.L0:                         # emit_data_section:667
+	.string "abcd"       # emit_data_section:668
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	sub $8, %rsp         # emit_func_prologue:715
+	lea .L0(%rip), %rax  # emit_expr -> emit_expr -> emit_gload:93
+	mov %rax, -8(%rbp)   # emit_expr -> emit_expr -> emit_lsave:153
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){char s[5]="asdf";}
+ast: (int())f(){(decl [5]char s "asdf");}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	sub $8, %rsp         # emit_func_prologue:715
+	movb $97, -8(%rbp)   # emit_expr -> emit_expr:489
+	movb $115, -7(%rbp)  # emit_expr -> emit_expr:489
+	movb $100, -6(%rbp)  # emit_expr -> emit_expr:489
+	movb $102, -5(%rbp)  # emit_expr -> emit_expr:489
+	movb $0, -4(%rbp)    # emit_expr -> emit_expr:490
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){char s[]="asdf";}
+ast: (int())f(){(decl [5]char s "asdf");}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	sub $8, %rsp         # emit_func_prologue:715
+	movb $97, -8(%rbp)   # emit_expr -> emit_expr:489
+	movb $115, -7(%rbp)  # emit_expr -> emit_expr:489
+	movb $100, -6(%rbp)  # emit_expr -> emit_expr:489
+	movb $102, -5(%rbp)  # emit_expr -> emit_expr:489
+	movb $0, -4(%rbp)    # emit_expr -> emit_expr:490
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){int a[3]={1,2,3};}
+ast: (int())f(){(decl [3]int a {1,2,3});}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	sub $16, %rsp        # emit_func_prologue:715
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	mov %eax, -16(%rbp)  # emit_expr -> emit_expr -> emit_lsave:153
+	mov $2, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	mov %eax, -12(%rbp)  # emit_expr -> emit_expr -> emit_lsave:153
+	mov $3, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	mov %eax, -8(%rbp)   # emit_expr -> emit_expr -> emit_lsave:153
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){int a[]={1,2,3};}
+ast: (int())f(){(decl [3]int a {1,2,3});}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	sub $16, %rsp        # emit_func_prologue:715
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	mov %eax, -16(%rbp)  # emit_expr -> emit_expr -> emit_lsave:153
+	mov $2, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	mov %eax, -12(%rbp)  # emit_expr -> emit_expr -> emit_lsave:153
+	mov $3, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	mov %eax, -8(%rbp)   # emit_expr -> emit_expr -> emit_lsave:153
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){int a[3][5];}
+ast: (int())f(){(decl [3][5]int a);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	sub $64, %rsp        # emit_func_prologue:715
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){int *a[5];}
+ast: (int())f(){(decl [5]*int a);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	sub $40, %rsp        # emit_func_prologue:715
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){int a=1;int b=2;a=b=3;}
+ast: (int())f(){(decl int a 1);(decl int b 2);(= a (= b 3));}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	sub $24, %rsp        # emit_func_prologue:715
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	mov %eax, -8(%rbp)   # emit_expr -> emit_expr -> emit_lsave:153
+	mov $2, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	mov %eax, -16(%rbp)  # emit_expr -> emit_expr -> emit_lsave:153
+	mov $3, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_expr -> emit_binop -> emit_expr:404
+	mov %eax, -16(%rbp)  # emit_expr -> emit_expr -> emit_binop -> emit_expr -> emit_binop -> emit_assign -> emit_lsave:153
+	mov %eax, -8(%rbp)   # emit_expr -> emit_expr -> emit_binop -> emit_assign -> emit_lsave:153
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){int a=3;&a;}
+ast: (int())f(){(decl int a 3);(addr a);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	sub $8, %rsp         # emit_func_prologue:715
+	mov $3, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	mov %eax, -8(%rbp)   # emit_expr -> emit_expr -> emit_lsave:153
+	lea -8(%rbp), %rax   # emit_expr -> emit_expr:503
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){int a=3;*&a;}
+ast: (int())f(){(decl int a 3);(deref (addr a));}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	sub $8, %rsp         # emit_func_prologue:715
+	mov $3, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	mov %eax, -8(%rbp)   # emit_expr -> emit_expr -> emit_lsave:153
+	lea -8(%rbp), %rax   # emit_expr -> emit_expr -> emit_expr:503
+	mov (%rax), %ecx     # emit_expr -> emit_expr -> emit_load_deref:380
+	mov %rcx, %rax       # emit_expr -> emit_expr -> emit_load_deref:381
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){int a=3;int *b=&a;*b;}
+ast: (int())f(){(decl int a 3);(decl *int b (addr a));(deref b);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	sub $24, %rsp        # emit_func_prologue:715
+	mov $3, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	mov %eax, -8(%rbp)   # emit_expr -> emit_expr -> emit_lsave:153
+	lea -8(%rbp), %rax   # emit_expr -> emit_expr -> emit_expr:503
+	mov %rax, -16(%rbp)  # emit_expr -> emit_expr -> emit_lsave:153
+	mov -16(%rbp), %rax  # emit_expr -> emit_expr -> emit_expr -> emit_lload:131
+	mov (%rax), %ecx     # emit_expr -> emit_expr -> emit_load_deref:380
+	mov %rcx, %rax       # emit_expr -> emit_expr -> emit_load_deref:381
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){if(1){2;}}
+ast: (int())f(){(if 1 {2;});}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	test %rax, %rax      # emit_expr -> emit_expr:520
+	je .L0               # emit_expr -> emit_expr:521
+	mov $2, %eax         # emit_expr -> emit_expr -> emit_expr -> emit_expr:404
+	.L0:                 # emit_expr -> emit_expr:530
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){if(1){2;}else{3;}}
+ast: (int())f(){(if 1 {2;} {3;});}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	test %rax, %rax      # emit_expr -> emit_expr:520
+	je .L0               # emit_expr -> emit_expr:521
+	mov $2, %eax         # emit_expr -> emit_expr -> emit_expr -> emit_expr:404
+	jmp .L1              # emit_expr -> emit_expr:525
+	.L0:                 # emit_expr -> emit_expr:526
+	mov $3, %eax         # emit_expr -> emit_expr -> emit_expr -> emit_expr:404
+	.L1:                 # emit_expr -> emit_expr:528
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){for(int a=1;3;7){5;}}
+ast: (int())f(){(for (decl int a 1) 3 7 {5;});}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	sub $8, %rsp         # emit_func_prologue:715
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_expr -> emit_expr:404
+	mov %eax, -8(%rbp)   # emit_expr -> emit_expr -> emit_expr -> emit_lsave:153
+	.L0:                 # emit_expr -> emit_expr:539
+	mov $3, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	test %rax, %rax      # emit_expr -> emit_expr:542
+	je .L1               # emit_expr -> emit_expr:543
+	mov $5, %eax         # emit_expr -> emit_expr -> emit_expr -> emit_expr:404
+	mov $7, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	jmp .L0              # emit_expr -> emit_expr:548
+	.L1:                 # emit_expr -> emit_expr:549
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){"abcd";}
+ast: (int())f(){"abcd";}
+
+	.data                # emit_data_section:664
+.L0:                         # emit_data_section:667
+	.string "abcd"       # emit_data_section:668
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	lea .L0(%rip), %rax  # emit_expr -> emit_expr:418
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){'c';}
+ast: (int())f(){'c';}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $99, %rax        # emit_expr -> emit_expr:401
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){a();}
+ast: (int())f(){(int)a();}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $0, %eax         # emit_expr -> emit_expr:457
+	call a               # emit_expr -> emit_expr:460
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){a(1,2,3,4,5,6);}
+ast: (int())f(){(int)a(1,2,3,4,5,6);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	push %rdi            # emit_expr -> emit_expr -> push:76
+	push %rsi            # emit_expr -> emit_expr -> push:76
+	push %rdx            # emit_expr -> emit_expr -> push:76
+	push %rcx            # emit_expr -> emit_expr -> push:76
+	push %r8             # emit_expr -> emit_expr -> push:76
+	push %r9             # emit_expr -> emit_expr -> push:76
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	push %rax            # emit_expr -> emit_expr -> push:76
+	mov $2, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	push %rax            # emit_expr -> emit_expr -> push:76
+	mov $3, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	push %rax            # emit_expr -> emit_expr -> push:76
+	mov $4, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	push %rax            # emit_expr -> emit_expr -> push:76
+	mov $5, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	push %rax            # emit_expr -> emit_expr -> push:76
+	mov $6, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	push %rax            # emit_expr -> emit_expr -> push:76
+	pop %r9              # emit_expr -> emit_expr -> pop:82
+	pop %r8              # emit_expr -> emit_expr -> pop:82
+	pop %rcx             # emit_expr -> emit_expr -> pop:82
+	pop %rdx             # emit_expr -> emit_expr -> pop:82
+	pop %rsi             # emit_expr -> emit_expr -> pop:82
+	pop %rdi             # emit_expr -> emit_expr -> pop:82
+	mov $0, %eax         # emit_expr -> emit_expr:457
+	call a               # emit_expr -> emit_expr:460
+	pop %r9              # emit_expr -> emit_expr -> pop:82
+	pop %r8              # emit_expr -> emit_expr -> pop:82
+	pop %rcx             # emit_expr -> emit_expr -> pop:82
+	pop %rdx             # emit_expr -> emit_expr -> pop:82
+	pop %rsi             # emit_expr -> emit_expr -> pop:82
+	pop %rdi             # emit_expr -> emit_expr -> pop:82
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){return 1;}
+ast: (int())f(){(return 1);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	leave                # emit_expr -> emit_expr:555
+	ret                  # emit_expr -> emit_expr:556
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){1<2;}
+ast: (int())f(){(< 1 2);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_comp -> emit_expr:404
+	push %rax            # emit_expr -> emit_expr -> emit_binop -> emit_comp -> push:76
+	mov $2, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_comp -> emit_expr:404
+	pop %rcx             # emit_expr -> emit_expr -> emit_binop -> emit_comp -> pop:82
+	cmp %rax, %rcx       # emit_expr -> emit_expr -> emit_binop -> emit_comp:259
+	setl %al             # emit_expr -> emit_expr -> emit_binop -> emit_comp:261
+	movzb %al, %eax      # emit_expr -> emit_expr -> emit_binop -> emit_comp:262
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){1>2;}
+ast: (int())f(){(> 1 2);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_comp -> emit_expr:404
+	push %rax            # emit_expr -> emit_expr -> emit_binop -> emit_comp -> push:76
+	mov $2, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_comp -> emit_expr:404
+	pop %rcx             # emit_expr -> emit_expr -> emit_binop -> emit_comp -> pop:82
+	cmp %rax, %rcx       # emit_expr -> emit_expr -> emit_binop -> emit_comp:259
+	setg %al             # emit_expr -> emit_expr -> emit_binop -> emit_comp:261
+	movzb %al, %eax      # emit_expr -> emit_expr -> emit_binop -> emit_comp:262
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){1==2;}
+ast: (int())f(){(== 1 2);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_comp -> emit_expr:404
+	push %rax            # emit_expr -> emit_expr -> emit_binop -> emit_comp -> push:76
+	mov $2, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_comp -> emit_expr:404
+	pop %rcx             # emit_expr -> emit_expr -> emit_binop -> emit_comp -> pop:82
+	cmp %rax, %rcx       # emit_expr -> emit_expr -> emit_binop -> emit_comp:259
+	sete %al             # emit_expr -> emit_expr -> emit_binop -> emit_comp:261
+	movzb %al, %eax      # emit_expr -> emit_expr -> emit_binop -> emit_comp:262
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){int a=1;a++;}
+ast: (int())f(){(decl int a 1);(++ a);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	sub $8, %rsp         # emit_func_prologue:715
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	mov %eax, -8(%rbp)   # emit_expr -> emit_expr -> emit_lsave:153
+	mov -8(%rbp), %eax   # emit_expr -> emit_expr -> emit_inc_dec -> emit_expr -> emit_lload:131
+	push %rax            # emit_expr -> emit_expr -> emit_inc_dec -> push:76
+	add $1, %rax         # emit_expr -> emit_expr -> emit_inc_dec:364
+	mov %eax, -8(%rbp)   # emit_expr -> emit_expr -> emit_inc_dec -> emit_assign -> emit_lsave:153
+	pop %rax             # emit_expr -> emit_expr -> emit_inc_dec -> pop:82
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){int a=1;a--;}
+ast: (int())f(){(decl int a 1);(-- a);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	sub $8, %rsp         # emit_func_prologue:715
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	mov %eax, -8(%rbp)   # emit_expr -> emit_expr -> emit_lsave:153
+	mov -8(%rbp), %eax   # emit_expr -> emit_expr -> emit_inc_dec -> emit_expr -> emit_lload:131
+	push %rax            # emit_expr -> emit_expr -> emit_inc_dec -> push:76
+	sub $1, %rax         # emit_expr -> emit_expr -> emit_inc_dec:364
+	mov %eax, -8(%rbp)   # emit_expr -> emit_expr -> emit_inc_dec -> emit_assign -> emit_lsave:153
+	pop %rax             # emit_expr -> emit_expr -> emit_inc_dec -> pop:82
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){!1;}
+ast: (int())f(){(! 1);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	cmp $0, %rax         # emit_expr -> emit_expr:573
+	sete %al             # emit_expr -> emit_expr:574
+	movzb %al, %eax      # emit_expr -> emit_expr:575
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){1?2:3;}
+ast: (int())f(){(? 1 2 3);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	test %rax, %rax      # emit_expr -> emit_expr:520
+	je .L0               # emit_expr -> emit_expr:521
+	mov $2, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	jmp .L1              # emit_expr -> emit_expr:525
+	.L0:                 # emit_expr -> emit_expr:526
+	mov $3, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	.L1:                 # emit_expr -> emit_expr:528
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){1&&2;}
+ast: (int())f(){(and 1 2);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	test %rax, %rax      # emit_expr -> emit_expr:594
+	mov $0, %rax         # emit_expr -> emit_expr:595
+	je .L0               # emit_expr -> emit_expr:596
+	mov $2, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	test %rax, %rax      # emit_expr -> emit_expr:598
+	mov $0, %rax         # emit_expr -> emit_expr:599
+	je .L0               # emit_expr -> emit_expr:600
+	mov $1, %rax         # emit_expr -> emit_expr:601
+	.L0:                 # emit_expr -> emit_expr:602
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){1||2;}
+ast: (int())f(){(or 1 2);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	test %rax, %rax      # emit_expr -> emit_expr:608
+	mov $1, %rax         # emit_expr -> emit_expr:609
+	jne .L0              # emit_expr -> emit_expr:610
+	mov $2, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	test %rax, %rax      # emit_expr -> emit_expr:612
+	mov $1, %rax         # emit_expr -> emit_expr:613
+	jne .L0              # emit_expr -> emit_expr:614
+	mov $0, %rax         # emit_expr -> emit_expr:615
+	.L0:                 # emit_expr -> emit_expr:616
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){1&2;}
+ast: (int())f(){(& 1 2);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	push %rax            # emit_expr -> emit_expr -> push:76
+	mov $2, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	pop %rcx             # emit_expr -> emit_expr -> pop:82
+	and %rcx, %rax       # emit_expr -> emit_expr:582
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){1|2;}
+ast: (int())f(){(| 1 2);}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	push %rax            # emit_expr -> emit_expr -> push:76
+	mov $2, %eax         # emit_expr -> emit_expr -> emit_expr:404
+	pop %rcx             # emit_expr -> emit_expr -> pop:82
+	or %rcx, %rax        # emit_expr -> emit_expr:589
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){1.2;}
+ast: (int())f(){1.200000;}
+
+	.data                # emit_data_section:664
+.L0:                         # emit_data_section:674
+	.long 858993459      # emit_data_section:675
+	.long 1072902963     # emit_data_section:676
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	movsd .L0(%rip), %xmm0 # emit_expr -> emit_expr:411
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){1.2+1;}
+ast: (int())f(){(+ 1.200000 1);}
+
+	.data                # emit_data_section:664
+.L0:                         # emit_data_section:674
+	.long 858993459      # emit_data_section:675
+	.long 1072902963     # emit_data_section:676
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	movsd .L0(%rip), %xmm0 # emit_expr -> emit_expr -> emit_binop -> emit_binop_float_arith -> emit_expr:411
+	sub $8, %rsp         # emit_expr -> emit_expr -> emit_binop -> emit_binop_float_arith -> push_xmm:61
+	movsd %xmm0, (%rsp)  # emit_expr -> emit_expr -> emit_binop -> emit_binop_float_arith -> push_xmm:62
+	mov $1, %eax         # emit_expr -> emit_expr -> emit_binop -> emit_binop_float_arith -> emit_expr:404
+	cvtsi2sd %eax, %xmm0 # emit_expr -> emit_expr -> emit_binop -> emit_binop_float_arith -> emit_todouble:116
+	movsd %xmm0, %xmm1   # emit_expr -> emit_expr -> emit_binop -> emit_binop_float_arith:305
+	movsd (%rsp), %xmm0  # emit_expr -> emit_expr -> emit_binop -> emit_binop_float_arith -> pop_xmm:68
+	add $8, %rsp         # emit_expr -> emit_expr -> emit_binop -> emit_binop_float_arith -> pop_xmm:69
+	addsd %xmm1, %xmm0   # emit_expr -> emit_expr -> emit_binop -> emit_binop_float_arith:307
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(int c){c;}
+ast: (int(int))f(int c){c;}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	push %rdi            # emit_func_prologue -> push:76
+	mov -8(%rbp), %eax   # emit_expr -> emit_expr -> emit_lload:131
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(int c){c;} int g(int d){d;}
+ast: (int(int))f(int c){c;}(int(int))g(int d){d;}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	push %rdi            # emit_func_prologue -> push:76
+	mov -8(%rbp), %eax   # emit_expr -> emit_expr -> emit_lload:131
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+	.text                # emit_func_prologue:687
+.global g                    # emit_func_prologue:688
+g:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	push %rdi            # emit_func_prologue -> push:76
+	mov -8(%rbp), %eax   # emit_expr -> emit_expr -> emit_lload:131
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int a=3;
+ast: (decl int a 3)
+
+	.data                # emit_data_section:664
+.global a                    # emit_global_var -> emit_data:637
+a:                           # emit_global_var -> emit_data:638
+	.long 3              # emit_global_var -> emit_data -> emit_data_int:629
+---------------------
+origin: struct {} a;
+ast: (decl (struct) a)
+
+	.data                # emit_data_section:664
+	.lcomm a, 0          # emit_global_var -> emit_bss:651
+---------------------
+origin: struct {int x; char y;} a;
+ast: (decl (struct (int) (char)) a)
+
+	.data                # emit_data_section:664
+	.lcomm a, 5          # emit_global_var -> emit_bss:651
+---------------------
+origin: struct {int x[3];} a;
+ast: (decl (struct ([3]int)) a)
+
+	.data                # emit_data_section:664
+	.lcomm a, 12         # emit_global_var -> emit_bss:651
+---------------------
+origin: int f(){struct tag {int x;} a; struct tag *p; p->x;}
+ast: (int())f(){(decl (struct (int)) a);(decl *(struct (int)) p);(deref p).x;}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	sub $24, %rsp        # emit_func_prologue:715
+	mov -16(%rbp), %rax  # emit_expr -> emit_expr -> emit_load_struct_ref -> emit_expr -> emit_lload:131
+	mov (%rax), %ecx     # emit_expr -> emit_expr -> emit_load_struct_ref -> emit_load_deref:380
+	mov %rcx, %rax       # emit_expr -> emit_expr -> emit_load_struct_ref -> emit_load_deref:381
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
+origin: int f(){struct {int x;} a; a.x;}
+ast: (int())f(){(decl (struct (int)) a);a.x;}
+
+	.data                # emit_data_section:664
+	.text                # emit_func_prologue:687
+.global f                    # emit_func_prologue:688
+f:                           # emit_func_prologue:689
+	push %rbp            # emit_func_prologue -> push:76
+	mov %rsp, %rbp       # emit_func_prologue:691
+	sub $8, %rsp         # emit_func_prologue:715
+	mov -8(%rbp), %eax   # emit_expr -> emit_expr -> emit_load_struct_ref -> emit_lload:131
+	leave                # emit_func_epilogue:721
+	ret                  # emit_func_epilogue:722
+---------------------
